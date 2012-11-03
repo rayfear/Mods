@@ -19,7 +19,6 @@ public class ChestUtilityRendererHandler implements
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
 		if (block instanceof BlockChestUtility) {
-			System.out.println("renderInventoryBlock");
 			BlockChestUtility blocku = (BlockChestUtility) block;
 			TileEntityRenderer.instance.renderTileEntityAt(blocku
 					.createNewTileEntity(UtilityChest.proxy.getClientWorld()),

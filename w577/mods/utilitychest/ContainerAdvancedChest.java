@@ -43,7 +43,7 @@ public class ContainerAdvancedChest extends Container {
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(int par1)
+	public ItemStack transferStackInSlot(EntityPlayer player, int par1)
     {
         ItemStack var2 = null;
         Slot var3 = (Slot)this.inventorySlots.get(par1);

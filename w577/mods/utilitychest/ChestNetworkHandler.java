@@ -210,7 +210,7 @@ public class ChestNetworkHandler {
 
 	public void handleSetInvSlot(TileEntityChestNetwork tecn, int i,
 			ItemStack is) {
-		if (UtilityChest.proxy.getType().equals("Client")) { return; }
+		if (UtilityChest.proxy.getServer() == null) { return; }
 		String net = tecn.network;
 		if (is == null) {
 			return;
@@ -218,6 +218,7 @@ public class ChestNetworkHandler {
 		if (is.stackSize > tecn.getInventoryStackLimit()) {
 			is.stackSize = tecn.getInventoryStackLimit();
 		}
+		System.out.println("network is: " + net);
 		System.out.println("networks is null: " + (networks == null ? "T" : "F"));
 		System.out.println("tecn is null: " + (tecn == null ? "T" : "F"));
 		if (!networks.contains(tecn.network)) {

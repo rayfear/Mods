@@ -121,7 +121,7 @@ public abstract class BlockChestUtility extends BlockContainer {
 				if (itemstack.itemID == is.itemID
 						&& (!is.getHasSubtypes() || itemstack.getItemDamage() == is
 								.getItemDamage())
-						&& ItemStack.func_77970_a(is, itemstack)) {
+						&& ItemStack.areItemStackTagsEqual(is, itemstack)) {
 					int j = is.stackSize + itemstack.stackSize;
 					if (j <= is.getMaxStackSize()) {
 						is.stackSize = 0;

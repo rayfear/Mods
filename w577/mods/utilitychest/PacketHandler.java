@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import net.minecraft.src.NetworkManager;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -18,55 +18,36 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler {
 
 	@Override
-	public void onPacketData(NetworkManager manager,
+	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
+		ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
+		int x = dat.readInt();
+		int y = dat.readInt();
+		int z = dat.readInt();
+		int dim = dat.readInt();
+		World world;
 		if (packet.channel.equals("UtilityServ")) {
-			ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
-			int x = dat.readInt();
-			int y = dat.readInt();
-			int z = dat.readInt();
-
-			World world = UtilityChest.proxy.getServer()
-					.worldServerForDimension(dat.readInt());
-			TileEntity te = world.getBlockTileEntity(x, y, z);
-
-			if (te instanceof TileEntityChestNetwork) {
-				TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
-
-				int length = dat.readShort();
-
-				StringBuilder str = new StringBuilder();
-				for (int i = 0; i < length; ++i) {
-					str.append(dat.readChar());
-				}
-				String network = str.toString();
-				tecn.handlePacketData(network);
+			world = UtilityChest.proxy.getServer().worldServerForDimension(dim);
+		} else if (packet.channel.equals("Utility")) {
+			world = UtilityChest.proxy.getClientWorld();
+			if (world.getWorldInfo().getDimension() != dim) {
+				return;
 			}
+		} else {
+			throw new IllegalStateException("Unable to use packet; unknown packet type: " + packet.channel);
 		}
-		if (packet.channel.equals("Utility")) {
-			ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
-			int x = dat.readInt();
-			int y = dat.readInt();
-			int z = dat.readInt();
-			int dim = dat.readInt();
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te instanceof TileEntityChestNetwork) {
+			TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
 
-			World world = UtilityChest.proxy.getClientWorld();
-			if (world.getWorldInfo().getDimension() == dim) {
-				TileEntity te = world.getBlockTileEntity(x, y, z);
+			int length = dat.readShort();
 
-				if (te instanceof TileEntityChestNetwork) {
-					TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
-
-					int length = dat.readShort();
-
-					StringBuilder str = new StringBuilder();
-					for (int i = 0; i < length; ++i) {
-						str.append(dat.readChar());
-					}
-					String network = str.toString();
-					tecn.handlePacketData(network);
-				}
+			StringBuilder str = new StringBuilder();
+			for (int i = 0; i < length; ++i) {
+				str.append(dat.readChar());
 			}
+			String network = str.toString();
+			tecn.handlePacketData(network);
 		}
 	}
 
@@ -92,7 +73,7 @@ public class PacketHandler implements IPacketHandler {
 		pkt.channel = "Utility";
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
-		pkt.isChunkDataPacket = false;
+		pkt.isChunkDataPacket = true;
 		return pkt;
 	}
 

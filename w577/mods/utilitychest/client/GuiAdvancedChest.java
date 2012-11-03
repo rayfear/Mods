@@ -24,7 +24,7 @@ public class GuiAdvancedChest extends GuiContainer {
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer()
+	protected void drawGuiContainerForegroundLayer(int i, int j)
     {
         this.fontRenderer.drawString(StatCollector.translateToLocal(this.upperInv.getInvName()), 8, 6, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal(this.lowerInv.getInvName()), 8, this.ySize - 96 + 2, 4210752);

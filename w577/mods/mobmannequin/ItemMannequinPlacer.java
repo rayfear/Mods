@@ -24,7 +24,7 @@ public class ItemMannequinPlacer extends Item {
     {
         super(par1);
         this.setHasSubtypes(true);
-        this.setTabToDisplayOn(CreativeTabs.tabDeco);
+        this.setCreativeTab(CreativeTabs.tabDecorations);
         this.setItemName("Mannequin");
         this.setIconCoord(0, 0);
         this.setTextureFile("/mannequinModImages/items.png");
@@ -47,9 +47,9 @@ public class ItemMannequinPlacer extends Item {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromDamage(int par1, int par2)
+    public int getColorFromItemStack(ItemStack stack, int par2)
     {
-        EntityEggInfo var3 = (EntityEggInfo)EntityList.entityEggs.get(Integer.valueOf(par1));
+        EntityEggInfo var3 = (EntityEggInfo)EntityList.entityEggs.get(stack.getItemDamage());
         return var3 != null ? (par2 == 0 ? var3.primaryColor : var3.secondaryColor) : 16777215;
     }
 	
@@ -81,7 +81,7 @@ public class ItemMannequinPlacer extends Item {
     }
 	
 	@Override
-	public boolean tryPlaceIntoWorld(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
         if (par3World.isRemote)
         {
@@ -116,7 +116,7 @@ public class ItemMannequinPlacer extends Item {
 				if (te instanceof TileEntityMobMannequin) {
 					TileEntityMobMannequin temm = (TileEntityMobMannequin) te;
 					temm.mobid = itemDamage;
-					Minecraft.getMinecraft().getSendQueue().getNetManager().addToSendQueue(temm.getAuxillaryInfoPacket());
+					Minecraft.getMinecraft().getSendQueue().getNetManager().addToSendQueue(temm.getDescriptionPacket());
 					world.markBlockNeedsUpdate(x,y,z);
 				}
 				return true;

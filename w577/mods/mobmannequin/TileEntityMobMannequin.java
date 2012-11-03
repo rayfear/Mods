@@ -40,7 +40,7 @@ public class TileEntityMobMannequin extends TileEntity {
 	}
 	
 	@Override
-	public Packet getAuxillaryInfoPacket() {
+	public Packet getDescriptionPacket() {
 		Packet pkt = PacketHandler.getPacket(this);
 		return pkt;
 	}

@@ -57,15 +57,15 @@ public class UtilityChest {
 
 		try {
 			cfg.load();
-			ncbi = cfg.getOrCreateBlockIdProperty("networkID", 3005).getInt(
+			ncbi = cfg.getBlock("networkID", 3005).getInt(
 					3005);
-			tcbi = cfg.getOrCreateBlockIdProperty("toolsID", 3006).getInt(3006);
-			ocbi = cfg.getOrCreateBlockIdProperty("oresID", 3007).getInt(3007);
-			gcbi = cfg.getOrCreateBlockIdProperty("grabberID", 3008).getInt(
+			tcbi = cfg.getBlock("toolsID", 3006).getInt(3006);
+			ocbi = cfg.getBlock("oresID", 3007).getInt(3007);
+			gcbi = cfg.getBlock("grabberID", 3008).getInt(
 					3008);
-			scbi = cfg.getOrCreateBlockIdProperty("smelterID", 3009).getInt(
+			scbi = cfg.getBlock("smelterID", 3009).getInt(
 					3009);
-			dcbi = cfg.getOrCreateBlockIdProperty("deenchantID", 3010).getInt(
+			dcbi = cfg.getBlock("deenchantID", 3010).getInt(
 					3010);
 		} catch (Exception e) {
 			FMLLog.log(Level.WARNING, e,

@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import net.minecraft.src.NetworkManager;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -18,7 +18,7 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler {
 
 	@Override
-	public void onPacketData(NetworkManager manager,
+	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
 		if (packet.channel.equals("MobManne")) {
 			ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
