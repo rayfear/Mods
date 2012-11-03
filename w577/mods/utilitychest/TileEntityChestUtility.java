@@ -11,7 +11,7 @@ import net.minecraft.src.TileEntity;
 public abstract class TileEntityChestUtility extends TileEntity implements
 		IInventory {
 
-	private ItemStack[] chestContents = new ItemStack[28];
+	private ItemStack[] chestContents = new ItemStack[27];
 	protected boolean altSaving = false;
 
 	@Override

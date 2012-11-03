@@ -11,12 +11,14 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 	public String network;
 
 	public TileEntityChestNetwork() {
+		//System.out.println("New chest tile entity: " + this.hashCode());
 		network = "";
 		altSaving = true;
 	}
 
 	@Override
 	public String getInvName() {
+		System.out.println(this.hashCode() + " - Network is " + this.network);
 		StringBuilder net = new StringBuilder();
 		net.append("\"");
 		if (network.indexOf('+') != -1) {
@@ -39,10 +41,11 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttc) {
 		super.readFromNBT(nbttc);
+		System.out.println(this.hashCode() + " - loading network: " + nbttc.getString("Network"));
 		network = nbttc.getString("Network");
+		System.out.println(network + "--");
 	}
 
-	@Override
 	public Packet getAuxillaryInfoPacket() {
 		Packet pkt = PacketHandler.getPacketNetwork(this);
 		return pkt;

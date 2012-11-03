@@ -34,7 +34,7 @@ public abstract class BlockChestUtility extends BlockContainer {
 		setHardness(2.5F);
 		setStepSound(Block.soundWoodFootstep);
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		this.setCreativeTab(CreativeTabs.tabDeco);
+		this.setCreativeTab(CreativeTabs.tabDecorations);
 	}
 
 	@Override
@@ -99,7 +99,6 @@ public abstract class BlockChestUtility extends BlockContainer {
 				chestu,
 				world, i, j, k);
 
-		//entityplayer.displayGUIChest((IInventory) chestu);
 		return true;
 	}
 

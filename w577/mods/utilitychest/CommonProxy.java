@@ -82,7 +82,7 @@ public class CommonProxy implements IGuiHandler {
 
 	public void showPlayerGuiChest(EntityPlayer entityplayer,
 			TileEntityChestUtility chestu, World world, int i, int j, int k) {
-		
+		entityplayer.displayGUIChest((IInventory) chestu);		
 	}
 
 }

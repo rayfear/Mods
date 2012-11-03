@@ -34,7 +34,7 @@ public class GuiChestNetwork extends GuiScreen {
 		textBoxName = new GuiTextField(fontRenderer, width / 2 - 100, 60, 200,
 				20);
 		textBoxName.setFocused(true);
-		textBoxName.setMaxStringLength(15);
+		textBoxName.setMaxStringLength(34);
 		textBoxPass = new GuiTextField(fontRenderer, width / 2 - 100, 110, 200,
 				20);
 		textBoxPass.setMaxStringLength(15);

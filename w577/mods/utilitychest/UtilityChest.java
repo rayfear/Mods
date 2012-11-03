@@ -23,7 +23,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 
-@Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.0.1")
+@Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.0.3")
 @NetworkMod(channels = { "Utility", "UtilityServ" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class UtilityChest {
 

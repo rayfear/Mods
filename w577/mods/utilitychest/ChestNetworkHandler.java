@@ -88,51 +88,61 @@ public class ChestNetworkHandler {
 		}
 	}
 
-	public void loadContents() {
-		networks = new ArrayList<String>();
-		contents = new HashMap<String, ItemStack[]>();
+	public void loadContents() {		
+		ChestNetworkHandler.networks = new ArrayList<String>();
+		ChestNetworkHandler.contents = new HashMap<String, ItemStack[]>();
+		
+		String proxyType = UtilityChest.proxy.getType();
+		
 		File file;
-		if (UtilityChest.proxy.getType().equals("Client")) {
-			file = new File(UtilityChest.proxy.getServer().getFile("")
-					.getAbsolutePath(), "\\saves\\" + curWorld + "\\ntwch.dat");
-		} else if (UtilityChest.proxy.getType().equals("Common")) {
-			file = new File(UtilityChest.proxy.getServer().getFile("")
-					.getAbsolutePath(), "\\" + curWorld + "\\ntwch.dat");
-		} else {
-			return;
+		String parentPath = UtilityChest.proxy.getServer().getFile("").getAbsolutePath();
+		
+		if (proxyType.equals("Client")) {
+			file = new File(parentPath, "\\saves\\" + curWorld + "\\ntwch.dat");
+		}
+		else if (proxyType.equals("Common")) {
+			file = new File(parentPath, "\\" + curWorld + "\\ntwch.dat");
+		}
+		else {
+			throw new IllegalStateException("Unable to load Networked Chest networks and contents; unknown proxy type: " + proxyType);
 		}
 
 		if (file.exists()) {
 			try {
-				FileInputStream fis = new FileInputStream(file);
-				NBTTagList tag = CompressedStreamTools.readCompressed(fis)
-						.getTagList("Ntwch");
-				NBTTagCompound comp = (NBTTagCompound) tag.tagAt(0);
-				NBTTagList nets = comp.getTagList("Networks");
-				for (int i = 0; i < nets.tagCount(); i++) {
-					networks.add(((NBTTagString) nets.tagAt(i)).toString());
-				}
-				for (String s : networks) {
-					NBTTagList conts = comp.getTagList(s + "Contents");
-					ItemStack chest[] = new ItemStack[27];
-					for (int i = 0; i < conts.tagCount(); i++) {
-						NBTTagCompound is = (NBTTagCompound) conts.tagAt(i);
-						int j = is.getByte("Slot") & 0xFF;
-						ItemStack item = ItemStack.loadItemStackFromNBT(is);
-						if (item == null) {
+				FileInputStream inStream = new FileInputStream(file);
+				NBTTagList ntwchTagList = CompressedStreamTools.readCompressed(inStream).getTagList("Ntwch");
+				NBTTagCompound ntwchTagMap = (NBTTagCompound) ntwchTagList.tagAt(0);
+				NBTTagList savedNetworks = ntwchTagMap.getTagList("Networks");
+				
+				for (int i = 0; i < savedNetworks.tagCount(); i++) {
+					String networkName = ((NBTTagString) savedNetworks.tagAt(i)).toString();
+					ChestNetworkHandler.networks.add(networkName);
+					
+					System.out.println("Network `" + networkName + "`:\n"); // dbg
+					
+					NBTTagList savedNetworkContents = ntwchTagMap.getTagList(networkName + "Contents");
+					ItemStack[] networkInventory = new ItemStack[27];
+					
+					for (int j = 0; j < savedNetworkContents.tagCount(); j++) {
+						NBTTagCompound networkContentsSlot = (NBTTagCompound) savedNetworkContents.tagAt(j);
+						int slotIndex = networkContentsSlot.getByte("Slot") & 0xFF;
+						ItemStack stack = ItemStack.loadItemStackFromNBT(networkContentsSlot);
+						if (stack == null) {
 							continue;
 						}
-						if (j >= 0 && j < chest.length) {
-							chest[j] = item;
+						System.out.println("Stack of " + stack.stackSize + " " + stack.getItemName());
+						if (slotIndex >= 0 && slotIndex < networkInventory.length) {
+							networkInventory[slotIndex] = stack;
 						}
 					}
 
-					contents.put(s, chest);
+					contents.put(networkName, networkInventory);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		
 		if (!networks.contains("")) {
 			networks.add("");
 			contents.put("", new ItemStack[27]);
@@ -200,6 +210,7 @@ public class ChestNetworkHandler {
 
 	public void handleSetInvSlot(TileEntityChestNetwork tecn, int i,
 			ItemStack is) {
+		if (UtilityChest.proxy.getType().equals("Client")) { return; }
 		String net = tecn.network;
 		if (is == null) {
 			return;
@@ -207,6 +218,8 @@ public class ChestNetworkHandler {
 		if (is.stackSize > tecn.getInventoryStackLimit()) {
 			is.stackSize = tecn.getInventoryStackLimit();
 		}
+		System.out.println("networks is null: " + (networks == null ? "T" : "F"));
+		System.out.println("tecn is null: " + (tecn == null ? "T" : "F"));
 		if (!networks.contains(tecn.network)) {
 			handleBlockPlaced(tecn);
 		}
