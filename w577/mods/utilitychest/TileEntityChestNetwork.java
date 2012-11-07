@@ -78,6 +78,7 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 	}
 
 	public void handlePacketData(String network) {
+		System.out.println(this.hashCode() + " " + UtilityChest.proxy.getType() + " network is: " + network);
 		this.network = network;
 		onInventoryChanged();
 		UtilityChest.cnhInstance.handleBlockPlaced(this);
