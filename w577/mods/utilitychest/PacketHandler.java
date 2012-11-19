@@ -47,7 +47,7 @@ public class PacketHandler implements IPacketHandler {
 				str.append(dat.readChar());
 			}
 			String network = str.toString();
-			tecn.handlePacketData(network);
+			tecn.handlePacketData(network, dim);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class PacketHandler implements IPacketHandler {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		pkt.channel = "Utility";
+		pkt.channel = "NetChest";
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = true;
@@ -80,7 +80,7 @@ public class PacketHandler implements IPacketHandler {
 	public static Packet getPacketNetworkServer(TileEntityChestNetwork te) {
 
 		Packet250CustomPayload pkt = (Packet250CustomPayload) getPacketNetwork(te);
-		pkt.channel = "UtilityServ";
+		pkt.channel = "NetChestServ";
 		return pkt;
 	}
 

@@ -101,4 +101,10 @@ public class ClientProxy extends CommonProxy {
 	public String getType() {
 		return "Client";
 	}
+	
+	@Override
+	public void sortShitOut(TileEntityChestNetwork tecn) {
+		World world = getServer().worldServerForDimension(getClientPlayer().dimension);
+		world.setBlockTileEntity(tecn.xCoord, tecn.yCoord, tecn.zCoord, tecn);
+	}
 }

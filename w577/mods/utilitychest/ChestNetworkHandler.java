@@ -147,6 +147,7 @@ public class ChestNetworkHandler {
 			networks.add("");
 			contents.put("", new ItemStack[27]);
 		}
+		
 	}
 
 	public void tick() {
@@ -215,21 +216,24 @@ public class ChestNetworkHandler {
 		if (is == null) {
 			return;
 		}
+		if (is.stackSize == 0) {
+			is = null;
+			return;
+		}
 		if (is.stackSize > tecn.getInventoryStackLimit()) {
 			is.stackSize = tecn.getInventoryStackLimit();
 		}
 		System.out.println("network is: " + net);
 		System.out.println("networks is null: " + (networks == null ? "T" : "F"));
 		System.out.println("tecn is null: " + (tecn == null ? "T" : "F"));
+		System.out.println("Stacksize is: " + is.stackSize);
 		if (!networks.contains(tecn.network)) {
 			handleBlockPlaced(tecn);
 		}
 		if (contents.get(tecn.network) == null) {
 			contents.put(tecn.network, new ItemStack[27]);
 		}
-		ItemStack[] iss = contents.get(net);
-		iss[i] = is;
-		contents.put(net, iss);
+		contents.get(net)[i] = is;
 		tecn.onInventoryChanged();
 	}
 

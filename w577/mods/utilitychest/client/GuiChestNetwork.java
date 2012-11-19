@@ -2,6 +2,8 @@ package w577.mods.utilitychest.client;
 
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+
 import w577.mods.utilitychest.PacketHandler;
 import w577.mods.utilitychest.TileEntityChestNetwork;
 import w577.mods.utilitychest.UtilityChest;
@@ -52,8 +54,12 @@ public class GuiChestNetwork extends GuiScreen {
 		} else {
 			chestn.network = textBoxName.getText() + '+' + textBoxPass.getText();
 		}
-		mc.getSendQueue().addToSendQueue(
-				PacketHandler.getPacketNetworkServer(chestn));
+		UtilityChest.proxy.sortShitOut(chestn);
+		System.out.println("TestFuck" + chestn.network);
+		PacketDispatcher.sendPacketToServer(PacketHandler.getPacketNetworkServer(chestn));
+		System.out.println("TestFuck2");
+		//System.out.println("--" + ((TileEntityChestNetwork)(UtilityChest.proxy.getServer().worldServerForDimension(UtilityChest.proxy.getClientPlayer().dimension).getBlockTileEntity(chestn.xCoord, chestn.yCoord, chestn.zCoord))).network);
+			
 	}
 
 	@Override

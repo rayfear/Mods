@@ -85,4 +85,8 @@ public class CommonProxy implements IGuiHandler {
 		entityplayer.displayGUIChest((IInventory) chestu);		
 	}
 
+	public void sortShitOut(TileEntityChestNetwork tileEntityChestNetwork) {
+		
+	}
+
 }
