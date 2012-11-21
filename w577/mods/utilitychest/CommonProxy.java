@@ -88,5 +88,7 @@ public class CommonProxy implements IGuiHandler {
 	public void sortShitOut(TileEntityChestNetwork tileEntityChestNetwork) {
 		
 	}
+	
+	
 
 }

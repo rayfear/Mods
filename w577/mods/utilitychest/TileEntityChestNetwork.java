@@ -23,7 +23,9 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 
 	@Override
 	public String getInvName() {
+		//TileEntityChestNetwork tecn = (TileEntityChestNetwork) UtilityChest.proxy.getServer().worldServerForDimension(this.worldObj.getWorldInfo().getDimension()).getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord);
 		//System.out.println(this.hashCode() + " - Network is " + this.network);
+		//this.network = tecn.network;
 		StringBuilder net = new StringBuilder();
 		net.append("\"");
 		if (network.indexOf('+') != -1) {
@@ -52,8 +54,14 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 		System.out.println(nbttc.getInteger("x") + " - " + nbttc.getInteger("y") + " - " + nbttc.getInteger("z") + ":- " + nbttc.getString("Network"));
 		network = nbttc.getString("Network");
 		dimension = nbttc.getInteger("Dim");
-		PacketDispatcher.sendPacketToAllInDimension(this.getDescriptionPacket(), dimension);
+		PacketDispatcher.sendPacketToAllInDimension(this.getDescriptionPacket(dimension), dimension);
+		//PacketDispatcher.sendPacketToAllInDimension(this.getDescriptionPacket(), dimension);
 		System.out.println(this.hashCode() + " - loading done: " + network + "--");
+	}
+
+	private Packet getDescriptionPacket(int dim) {
+		Packet pkt = PacketHandler.getPacketNetwork(this, dim);
+		return pkt;
 	}
 
 	@Override
@@ -64,6 +72,9 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 
 	@Override
 	public ItemStack getStackInSlot(int par1) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			return UtilityChest.cnhInstance.handleGetStackInSlot((TileEntityChestNetwork) UtilityChest.proxy.getServer().worldServerForDimension(dimension).getBlockTileEntity(xCoord, yCoord, zCoord), par1);
+		}
 		return UtilityChest.cnhInstance.handleGetStackInSlot(this, par1);
 	}
 
@@ -73,7 +84,9 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 		/*if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			UtilityChest.proxy.sortShitOut(this);
 		}*/
-		UtilityChest.cnhInstance.saveContents();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			UtilityChest.cnhInstance.saveContents();
+		}
 	}
 
 	@Override
@@ -83,16 +96,20 @@ public class TileEntityChestNetwork extends TileEntityChestUtility {
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
+		System.out.println("Testdecr");
 		return UtilityChest.cnhInstance.handleDecrStackSize(this, i, j);
 	}
 
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack is) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			return;
+		}
 		UtilityChest.cnhInstance.handleSetInvSlot(this, var1, is);
 	}
 
 	public void handlePacketData(String network, int dim) {
-		System.out.println(this.hashCode() + " " + UtilityChest.proxy.getType() + " network is: " + network);
+		System.out.println(this.hashCode() + " " + FMLCommonHandler.instance().getEffectiveSide() + " network is: " + network);
 		this.network = network;
 		this.dimension = dim;
 		onInventoryChanged();

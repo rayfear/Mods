@@ -59,6 +59,9 @@ public class PacketHandler implements IPacketHandler {
 		int z = te.zCoord;
 		int dim = te.worldObj.getWorldInfo().getDimension();
 		String network = te.network;
+		/*System.out.println("TEST");
+		System.out.format("Creating packet: x %d y %d z %d dim %d network %s \n", x, y, z, dim, network);
+		System.out.println("TEST2");*/
 		try {
 			dos.writeInt(x);
 			dos.writeInt(y);
@@ -81,6 +84,35 @@ public class PacketHandler implements IPacketHandler {
 
 		Packet250CustomPayload pkt = (Packet250CustomPayload) getPacketNetwork(te);
 		pkt.channel = "NetChestServ";
+		return pkt;
+	}
+
+	public static Packet getPacketNetwork(
+			TileEntityChestNetwork te, int dim) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		int x = te.xCoord;
+		int y = te.yCoord;
+		int z = te.zCoord;
+		String network = te.network;
+		/*System.out.println("TEST");
+		System.out.format("Creating packet: x %d y %d z %d dim %d network %s \n", x, y, z, dim, network);
+		System.out.println("TEST2");*/
+		try {
+			dos.writeInt(x);
+			dos.writeInt(y);
+			dos.writeInt(z);
+			dos.writeInt(dim);
+			dos.writeShort(network.length());
+			dos.writeChars(network);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Packet250CustomPayload pkt = new Packet250CustomPayload();
+		pkt.channel = "NetChest";
+		pkt.data = bos.toByteArray();
+		pkt.length = bos.size();
+		pkt.isChunkDataPacket = true;
 		return pkt;
 	}
 

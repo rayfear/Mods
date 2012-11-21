@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.EntityItem;
@@ -26,14 +29,17 @@ public class ChestNetworkHandler {
 
 	public static String curWorld;
 	private int tick;
-	private Random random;
 
 	public ChestNetworkHandler() {
 		curWorld = "";
-		random = new Random();
+		ChestNetworkHandler.networks = new ArrayList<String>();
+		ChestNetworkHandler.contents = new HashMap<String, ItemStack[]>();
 	}
 
 	public void saveContents() {
+		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER) {
+			return;
+		}
 		File file;
 		File tmpFile;
 		if (UtilityChest.proxy.getType().equals("Client")) {
@@ -159,6 +165,7 @@ public class ChestNetworkHandler {
 				tick = 0;
 				curWorld = savePlace;
 				loadContents();
+				System.out.println("Loaded");
 			}
 			tick++;
 			if (tick >= 20) {

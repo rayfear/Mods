@@ -8,6 +8,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -163,7 +164,9 @@ public class UtilityChest {
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 
 		// Register ticking
-		TickRegistry.registerTickHandler(new UtilityTickHandler(), Side.SERVER);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			TickRegistry.registerTickHandler(new UtilityTickHandler(), Side.SERVER);
+		}
 		cnhInstance = new ChestNetworkHandler();
 
 		// Register rendering
