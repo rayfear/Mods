@@ -7,11 +7,12 @@ import java.io.IOException;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -26,32 +27,32 @@ public class PacketHandler implements IPacketHandler {
 		int z = dat.readInt();
 		int dim = dat.readInt();
 		World world;
-		if (packet.channel.equals("UtilityServ")) {
-			world = UtilityChest.proxy.getServer().worldServerForDimension(dim);
-		} else if (packet.channel.equals("Utility")) {
+		if (packet.channel.equals("NetworkChestServ")) {
+			world = MinecraftServer.getServer().worldServerForDimension(dim);
+		} else if (packet.channel.equals("NetworkChest")) {
 			world = UtilityChest.proxy.getClientWorld();
 			if (world.getWorldInfo().getDimension() != dim) {
 				return;
 			}
 		} else {
-			throw new IllegalStateException("Unable to use packet; unknown packet type: " + packet.channel);
+			throw new IllegalArgumentException("Recieved an unknown packet");
 		}
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof TileEntityChestNetwork) {
 			TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
-
-			int length = dat.readShort();
-
+			
+			int length = dat.readInt();
 			StringBuilder str = new StringBuilder();
-			for (int i = 0; i < length; ++i) {
+			for (int i = 0; i < length; i++) {
 				str.append(dat.readChar());
 			}
 			String network = str.toString();
-			tecn.handlePacketData(network, dim);
+			tecn.handlePacketData(network);
 		}
 	}
 
-	public static Packet getPacketNetwork(TileEntityChestNetwork te) {
+	public static Packet250CustomPayload getNetworkPacket(TileEntityChestNetwork te) {
+		Packet250CustomPayload pack = new Packet250CustomPayload();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		int x = te.xCoord;
@@ -59,61 +60,31 @@ public class PacketHandler implements IPacketHandler {
 		int z = te.zCoord;
 		int dim = te.worldObj.getWorldInfo().getDimension();
 		String network = te.network;
-		/*System.out.println("TEST");
-		System.out.format("Creating packet: x %d y %d z %d dim %d network %s \n", x, y, z, dim, network);
-		System.out.println("TEST2");*/
+		
 		try {
 			dos.writeInt(x);
 			dos.writeInt(y);
 			dos.writeInt(z);
 			dos.writeInt(dim);
-			dos.writeShort(network.length());
+			dos.writeInt(network.length());
 			dos.writeChars(network);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		pkt.channel = "NetChest";
-		pkt.data = bos.toByteArray();
-		pkt.length = bos.size();
-		pkt.isChunkDataPacket = true;
-		return pkt;
+		
+		pack.data = bos.toByteArray();
+		pack.channel = "NetworkChest";
+		pack.length = bos.size();
+		pack.isChunkDataPacket = true;
+		
+		return pack;
 	}
-
-	public static Packet getPacketNetworkServer(TileEntityChestNetwork te) {
-
-		Packet250CustomPayload pkt = (Packet250CustomPayload) getPacketNetwork(te);
-		pkt.channel = "NetChestServ";
-		return pkt;
-	}
-
-	public static Packet getPacketNetwork(
-			TileEntityChestNetwork te, int dim) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
-		int x = te.xCoord;
-		int y = te.yCoord;
-		int z = te.zCoord;
-		String network = te.network;
-		/*System.out.println("TEST");
-		System.out.format("Creating packet: x %d y %d z %d dim %d network %s \n", x, y, z, dim, network);
-		System.out.println("TEST2");*/
-		try {
-			dos.writeInt(x);
-			dos.writeInt(y);
-			dos.writeInt(z);
-			dos.writeInt(dim);
-			dos.writeShort(network.length());
-			dos.writeChars(network);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		pkt.channel = "NetChest";
-		pkt.data = bos.toByteArray();
-		pkt.length = bos.size();
-		pkt.isChunkDataPacket = true;
-		return pkt;
+	
+	public static Packet250CustomPayload getNetworkPacketServer(TileEntityChestNetwork te) {
+		// TODO Auto-generated method stub
+		Packet250CustomPayload pack = getNetworkPacket(te);
+		pack.channel = "NetworkChestServ";
+		return pack;
 	}
 
 }

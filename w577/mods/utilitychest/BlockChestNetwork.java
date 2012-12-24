@@ -1,78 +1,86 @@
 package w577.mods.utilitychest;
 
-import java.util.Random;
-
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
-public class BlockChestNetwork extends BlockChestUtility {
+public class BlockChestNetwork extends BlockContainer {
 
 	public BlockChestNetwork(int id) {
-		super(id);
-		setBlockName("NetworkedChest");
-		altSaving = true;
+		super(id, Material.wood);
+		this.blockIndexInTexture = 0;
+		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setBlockName("NetworkedChest");
+		if (id >= 256) {
+			this.disableStats();
+		}
+		this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 	}
 	
 	@Override
-	public int tickRate() {
-		return 20;
+	public boolean isOpaqueCube() {
+		return false;
 	}
-
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return UtilityChest.renderId;
+	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityChestNetwork();
 	}
-
-	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k,
-			EntityLiving entityliving) {
-		super.onBlockPlacedBy(world, i, j, k, entityliving);
-
-		TileEntity te = world.getBlockTileEntity(i, j, k);
-		if (te == null) {
-			return;
-		}
-
-		if (!(te instanceof TileEntityChestNetwork)) {
-			return;
-		}
-
-		UtilityChest.proxy.showPlayerGuiChestNetwork(
-				(EntityPlayer) entityliving,
-				(TileEntityChestNetwork) world.getBlockTileEntity(i, j, k),
-				world, i, j, k);
-		world.scheduleBlockUpdate(i, j, k, this.blockID, this.tickRate());
-	}
 	
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k,
-			EntityPlayer entityplayer, int par6, float par7, float par8,
-			float par9) {
-		TileEntityChestNetwork tecn = (TileEntityChestNetwork) UtilityChest.proxy.getServer().worldServerForDimension(entityplayer.dimension).getBlockTileEntity(i, j, k);
-		//((TileEntityChestNetwork)world.getBlockTileEntity(i, j, k)).network = tecn.network;
-		world.setBlockTileEntity(i, j, k, tecn);
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity) {
+		int face = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int meta = 2;
 		
-		UtilityChest.proxy.showPlayerGuiChest(
-				entityplayer,
-				tecn,
-				world, i, j, k);
-		System.out.format("Activated block with network: %s %s \n", FMLCommonHandler.instance().getEffectiveSide(), tecn.network);
-		return true;
+		if (face == 0)
+        {
+            meta = 2;
+        }
+
+        if (face == 1)
+        {
+            meta = 5;
+        }
+
+        if (face == 2)
+        {
+            meta = 3;
+        }
+
+        if (face == 3)
+        {
+            meta = 4;
+        }
+        if (entity instanceof EntityPlayer) {
+        	world.setBlockMetadataWithNotify(i, j, k, meta);
+        	((EntityPlayer) entity).openGui(UtilityChest.instance, 0, world, i, j, k);
+        }
 	}
 	
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			//System.out.println("Tickfuck");
-			TileEntityChestNetwork tecn = (TileEntityChestNetwork) world.getBlockTileEntity(i, j, k);
-			PacketDispatcher.sendPacketToAllInDimension(tecn.getDescriptionPacket(), tecn.dimension);
-			world.scheduleBlockUpdate(i, j, k, this.blockID, this.tickRate());
-		}
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityPlayer, int i1, float f, float f1, float f2) {
+		entityPlayer.openGui(UtilityChest.instance, 1, world, i, j, k);
+		return true;
+		
 	}
 
 }

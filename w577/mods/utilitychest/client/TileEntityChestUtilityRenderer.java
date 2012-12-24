@@ -3,18 +3,17 @@ package w577.mods.utilitychest.client;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import net.minecraft.src.ModelChest;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntitySpecialRenderer;
+import net.minecraft.client.model.ModelChest;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
+	
+	private String fileLoc;
+	private ModelChest chestModel = new ModelChest();
 
-	private ModelChest chestModel;
-	public String location;
-
-	public TileEntityChestUtilityRenderer(String loc) {
-		chestModel = new ModelChest();
-		location = loc;
+	public TileEntityChestUtilityRenderer(String file) {
+		fileLoc = file;
 	}
 
 	@Override
@@ -28,7 +27,7 @@ public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 			i = te.getBlockMetadata();
 		}
 
-		bindTextureByName(location);
+		bindTextureByName(fileLoc);
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -57,11 +56,10 @@ public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(j, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 
-		chestModel.renderAll();
+		chestModel .renderAll();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
 	}
 
 }

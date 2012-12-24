@@ -1,119 +1,84 @@
 package w577.mods.utilitychest;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Packet;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityChestNetwork extends TileEntityChestUtility {
+public class TileEntityChestNetwork extends TileEntity implements IInventory {
 
 	public String network;
-	public int dimension;
-
+	private ChestNetworkHandler cnh;
+	
 	public TileEntityChestNetwork() {
-		dimension = 0;
 		network = "";
-		altSaving = true;
+		cnh = UtilityChest.getCNH();
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 27;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) {
+		return UtilityChest.getCNH().handleGetStackInSlot(var1, this);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int var1, int var2) {
+		return UtilityChest.getCNH().handleDecrStackInSlot(var1, var2, this);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1) {
+		return UtilityChest.getCNH().handleGetStackInSlotOnClosing(var1, this);
+	}
+
+	@Override
+	public void setInventorySlotContents(int var1, ItemStack var2) {
+		UtilityChest.getCNH().handleSetInvSlotContents(var1, var2, this);
 	}
 
 	@Override
 	public String getInvName() {
-		//TileEntityChestNetwork tecn = (TileEntityChestNetwork) UtilityChest.proxy.getServer().worldServerForDimension(this.worldObj.getWorldInfo().getDimension()).getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord);
-		//System.out.println(this.hashCode() + " - Network is " + this.network);
-		//this.network = tecn.network;
-		StringBuilder net = new StringBuilder();
-		net.append("\"");
-		if (network.indexOf('+') != -1) {
-			net.append(network.substring(0, network.indexOf('+')));
-			net.append("\"*");
+		StringBuilder name = new StringBuilder().append("Networked Chest: \"");
+		if (network.contains("+")) {
+			name.append(network.substring(0,network.indexOf("+"))).append("\"*");
 		} else {
-			net.append(network);
-			net.append("\"");
+			name.append(network).append("\"");
 		}
+		return name.toString();
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public void openChest() {
 		
-		return "Networked Chest: " + net.toString();
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttc) {
-		super.writeToNBT(nbttc);
-		System.out.println(this.hashCode() + " - saving network: " + this.network);
-		nbttc.setString("Network", network);
-		nbttc.setInteger("Dim", dimension);
-		System.out.println(this.hashCode() + " - saving done: " + network + "--");
+	public void closeChest() {
+		
 	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttc) {
-		super.readFromNBT(nbttc);
-		System.out.println(nbttc.getInteger("x") + " - " + nbttc.getInteger("y") + " - " + nbttc.getInteger("z") + ":- " + nbttc.getString("Network"));
-		network = nbttc.getString("Network");
-		dimension = nbttc.getInteger("Dim");
-		PacketDispatcher.sendPacketToAllInDimension(this.getDescriptionPacket(dimension), dimension);
-		//PacketDispatcher.sendPacketToAllInDimension(this.getDescriptionPacket(), dimension);
-		System.out.println(this.hashCode() + " - loading done: " + network + "--");
-	}
-
-	private Packet getDescriptionPacket(int dim) {
-		Packet pkt = PacketHandler.getPacketNetwork(this, dim);
-		return pkt;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		Packet pkt = PacketHandler.getPacketNetwork(this);
-		return pkt;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int par1) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			return UtilityChest.cnhInstance.handleGetStackInSlot((TileEntityChestNetwork) UtilityChest.proxy.getServer().worldServerForDimension(dimension).getBlockTileEntity(xCoord, yCoord, zCoord), par1);
-		}
-		return UtilityChest.cnhInstance.handleGetStackInSlot(this, par1);
-	}
-
+	
 	@Override
 	public void onInventoryChanged() {
 		super.onInventoryChanged();
-		/*if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			UtilityChest.proxy.sortShitOut(this);
-		}*/
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			UtilityChest.cnhInstance.saveContents();
-		}
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		System.out.println("Testdecr");
-		return UtilityChest.cnhInstance.handleDecrStackSize(this, i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int var1, ItemStack is) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			return;
-		}
-		UtilityChest.cnhInstance.handleSetInvSlot(this, var1, is);
-	}
-
-	public void handlePacketData(String network, int dim) {
-		System.out.println(this.hashCode() + " " + FMLCommonHandler.instance().getEffectiveSide() + " network is: " + network);
+	
+	public void handlePacketData(String network) {
 		this.network = network;
-		this.dimension = dim;
-		onInventoryChanged();
-		UtilityChest.cnhInstance.handleBlockPlaced(this);
+		UtilityChest.getCNH().handleBlockPlaced(this);
 	}
-
+	
 }
