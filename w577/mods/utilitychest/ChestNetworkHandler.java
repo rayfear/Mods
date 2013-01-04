@@ -59,10 +59,15 @@ public class ChestNetworkHandler {
 
 	public ItemStack handleGetStackInSlot(int var1,
 			TileEntityChestNetwork tecn) {
-		System.out.println("Getting " + var1);
 		NetworkItems items = contents.get(tecn.network);
 		
 		if (items == null) {
+			return null;
+		}
+		if (items.getItemAt(var1) == null) {
+			return null;
+		}
+		if (items.getItemAt(var1).stackSize <= 0) {
 			return null;
 		}
 		return items.getItemAt(var1);
@@ -93,6 +98,15 @@ public class ChestNetworkHandler {
 			return;
 		}
 		items.setItemAt(var1, var2, tecn.getInventoryStackLimit());
+	}
+	
+	public void handleSetInvSlotContents(int var1, ItemStack var2,
+			String network) {
+		NetworkItems items = contents.get(network);
+		if (items == null) {
+			return;
+		}
+		items.setItemAt(var1, var2, 64);
 	}
 
 	public void handleBlockPlaced(TileEntityChestNetwork tecn) {

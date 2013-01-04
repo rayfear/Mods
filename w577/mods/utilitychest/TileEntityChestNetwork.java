@@ -1,8 +1,13 @@
 package w577.mods.utilitychest;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityChestNetwork extends TileEntity implements IInventory {
@@ -37,7 +42,25 @@ public class TileEntityChestNetwork extends TileEntity implements IInventory {
 
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2) {
-		UtilityChest.getCNH().handleSetInvSlotContents(var1, var2, this);
+		if (var1 != 1) {
+			return;
+		}
+		System.out.println("Side: " + FMLCommonHandler.instance().getEffectiveSide()); 
+		if (var2 != null) {
+			System.out.println("Stacksize: " + var2.stackSize);
+		} else {
+			System.out.println("Stacksize: null");
+		}
+		/*if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			//System.out.println("Side is client, so returning");
+			return;
+		}*/
+		/*if (var2 != null) {
+			System.out.println("Stacksize: " + var2.stackSize);
+		}*/
+		UtilityChest.getCNH().handleSetInvSlotContents(var1, var2, network);
+		//System.out.println("Sending packet to server, set");
+		//PacketDispatcher.sendPacketToServer(PacketHandler.getNetworkPacketSet(this, var1, var2));
 	}
 
 	@Override
@@ -68,6 +91,26 @@ public class TileEntityChestNetwork extends TileEntity implements IInventory {
 
 	@Override
 	public void closeChest() {
+		
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+    {
+        super.readFromNBT(par1NBTTagCompound);
+        network = par1NBTTagCompound.getString("network");
+    }
+	
+	@Override
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+    {
+        super.writeToNBT(par1NBTTagCompound);
+        par1NBTTagCompound.setString("network", network);
+    }
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		return PacketHandler.getNetworkPacket(this);
 		
 	}
 	

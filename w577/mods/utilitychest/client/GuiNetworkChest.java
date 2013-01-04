@@ -9,6 +9,7 @@ import w577.mods.utilitychest.TileEntityChestNetwork;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.world.World;
@@ -55,7 +56,11 @@ public class GuiNetworkChest extends GuiScreen {
 			network = network + '+' + passBox.getText();
 		}
 		te.network = network;
-		PacketDispatcher.sendPacketToServer(PacketHandler.getNetworkPacketServer(te));
+		NetClientHandler nch = this.mc.getSendQueue();
+		if (nch != null) {
+			nch.addToSendQueue(PacketHandler.getNetworkPacketServer(te));
+		}
+		//PacketDispatcher.sendPacketToServer(PacketHandler.getNetworkPacketServer(te));
 
 	}
 

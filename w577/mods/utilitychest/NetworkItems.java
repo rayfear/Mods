@@ -17,7 +17,6 @@ public class NetworkItems {
 		if (contents[i] == null) {
 			return null;
 		}
-		System.out.println(contents[i].stackSize);
 		return contents[i];
 	}
 	

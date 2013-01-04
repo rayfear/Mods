@@ -19,7 +19,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.1")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"NetworkChest", "NetworkChestServ"}, packetHandler = PacketHandler.class)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"NetworkChest", "NetworkChestServ", "NetworkSet"}, packetHandler = PacketHandler.class)
 public class UtilityChest {
 
 	@Instance("UtilityChest")
