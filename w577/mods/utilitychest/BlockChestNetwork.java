@@ -78,6 +78,9 @@ public class BlockChestNetwork extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityPlayer, int i1, float f, float f1, float f2) {
+		if (world.isRemote) {
+			return true;
+		}
 		entityPlayer.openGui(UtilityChest.instance, 1, world, i, j, k);
 		return true;
 		

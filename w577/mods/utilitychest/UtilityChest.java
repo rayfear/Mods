@@ -1,6 +1,7 @@
 package w577.mods.utilitychest;
 
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -19,7 +20,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.1")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"NetworkChest", "NetworkChestServ", "NetworkSet"}, packetHandler = PacketHandler.class)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"NetworkChest", "NetworkChestServ"}, packetHandler = PacketHandler.class)
 public class UtilityChest {
 
 	@Instance("UtilityChest")
@@ -32,7 +33,7 @@ public class UtilityChest {
 	
 	public static int renderId;
 	
-	private static ChestNetworkHandler cnh;
+	//private static ChestNetworkSaveHandler cnh;
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
@@ -43,6 +44,8 @@ public class UtilityChest {
 		GameRegistry.registerBlock(blockChestNetwork, ItemBlock.class, "NetworkedChest", "UtilityChest");
 		
 		GameRegistry.registerTileEntity(TileEntityChestNetwork.class, "NetworkedChest");
+		
+		MinecraftForge.EVENT_BUS.register(new ChestNetworkSaveHandler.ChestNetworkWorldEventHandler());
 	}
 	
 	@Init
@@ -51,8 +54,8 @@ public class UtilityChest {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		
-		TickRegistry.registerTickHandler(new UtilityTickHandler(Side.SERVER), Side.SERVER);
-		cnh = new ChestNetworkHandler();
+		//TickRegistry.registerTickHandler(new UtilityTickHandler(Side.SERVER), Side.SERVER);
+		//cnh = new ChestNetworkSaveHandler();
 		proxy.registerRenderers();
 	}
 	
@@ -61,7 +64,7 @@ public class UtilityChest {
 		
 	}
 
-	public static ChestNetworkHandler getCNH() {
+	/*public static ChestNetworkSaveHandler getCNH() {
 		return cnh;
-	}
+	}*/
 }

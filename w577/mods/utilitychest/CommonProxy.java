@@ -19,7 +19,10 @@ public class CommonProxy implements IGuiHandler {
 		if (ID == 0) {
 		}
 		if (ID == 1) {
-			return new ContainerChest(player.inventory, (IInventory) te);
+			TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
+			ChestNetworkSaveHandler ces = ChestNetworkSaveHandler.instance(false);
+			System.out.println(ces);
+			return new ContainerChest(player.inventory, ChestNetworkSaveHandler.instance(false).getInventory(tecn.network));
 		}
 		return null;
 	}

@@ -1,4 +1,4 @@
-package w577.mods.utilitychest;
+/*package w577.mods.utilitychest;
 
 import java.util.EnumSet;
 
@@ -46,4 +46,4 @@ public class UtilityTickHandler implements ITickHandler {
 		return "UtilityTickHandler";
 	}
 
-}
+}*/

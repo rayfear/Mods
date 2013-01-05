@@ -49,23 +49,6 @@ public class PacketHandler implements IPacketHandler {
 				tecn.handlePacketData(network);
 			}
 		}
-		if (packet.channel.equals("NetworkSet")) {
-			String network = readString(dat);
-			int slot = dat.readInt();
-			int id = dat.readInt();
-			int stacksize = dat.readInt();
-			int damage = dat.readInt();
-			boolean hasNBT = dat.readBoolean();
-			NBTTagCompound nbt = null;
-			if (hasNBT) {
-				try {
-					nbt = (NBTTagCompound) NBTTagCompound.readNamedTag(dat);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			UtilityChest.getCNH().handleSetInvSlotContents(slot, new ItemStack(id, stacksize, damage), network);
-		}
 	}
 
 	public static Packet250CustomPayload getNetworkPacket(TileEntityChestNetwork te) {

@@ -10,17 +10,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityChestNetwork extends TileEntity implements IInventory {
+public class TileEntityChestNetwork extends TileEntity {
 
 	public String network;
-	private ChestNetworkHandler cnh;
 	
 	public TileEntityChestNetwork() {
 		network = "";
-		cnh = UtilityChest.getCNH();
 	}
 
-	@Override
+	/*@Override
 	public int getSizeInventory() {
 		return 27;
 	}
@@ -54,10 +52,10 @@ public class TileEntityChestNetwork extends TileEntity implements IInventory {
 		/*if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			//System.out.println("Side is client, so returning");
 			return;
-		}*/
+		}
 		/*if (var2 != null) {
 			System.out.println("Stacksize: " + var2.stackSize);
-		}*/
+		}
 		UtilityChest.getCNH().handleSetInvSlotContents(var1, var2, network);
 		//System.out.println("Sending packet to server, set");
 		//PacketDispatcher.sendPacketToServer(PacketHandler.getNetworkPacketSet(this, var1, var2));
@@ -92,7 +90,7 @@ public class TileEntityChestNetwork extends TileEntity implements IInventory {
 	@Override
 	public void closeChest() {
 		
-	}
+	}*/
 	
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -110,18 +108,16 @@ public class TileEntityChestNetwork extends TileEntity implements IInventory {
 	
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getNetworkPacket(this);
-		
+		return PacketHandler.getNetworkPacket(this);	
 	}
 	
-	@Override
+	/*@Override
 	public void onInventoryChanged() {
 		super.onInventoryChanged();
-	}
+	}*/
 	
 	public void handlePacketData(String network) {
 		this.network = network;
-		UtilityChest.getCNH().handleBlockPlaced(this);
 	}
 	
 }
