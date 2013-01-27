@@ -38,6 +38,7 @@ public class GuiNetworkChest extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		controlList.add(new GuiButton(0, width / 2 - 100, height / 4 + 120,
 				"Done"));
+		((GuiButton) controlList.get(0)).enabled = false;
 		nameBox = new GuiTextField(fontRenderer, width / 2 - 100, 60, 200, 20);
 		nameBox.setFocused(true);
 		nameBox.setMaxStringLength(34);
@@ -60,7 +61,6 @@ public class GuiNetworkChest extends GuiScreen {
 		if (nch != null) {
 			nch.addToSendQueue(PacketHandler.getNetworkPacketServer(te));
 		}
-		//PacketDispatcher.sendPacketToServer(PacketHandler.getNetworkPacketServer(te));
 
 	}
 
@@ -105,9 +105,14 @@ public class GuiNetworkChest extends GuiScreen {
 			}
 		}
 		if ((allowedCharacters.indexOf(c) >= 0 || i == 14)
-				&& !(c == '+' || c == '*' || c == ' ')) {
+				&& !(c == '+' || c == '*' || c == ' ' || c == '"')) {
 			nameBox.textboxKeyTyped(c, i);
 			passBox.textboxKeyTyped(c, i);
+		}
+		if (nameBox.getText().equals("")) {
+			((GuiButton) controlList.get(0)).enabled = false;
+		} else {
+			((GuiButton) controlList.get(0)).enabled = true;
 		}
 	}
 

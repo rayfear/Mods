@@ -29,6 +29,7 @@ public class ChestNetworkSaveHandler {
 		@ForgeSubscribe
 		public void onWorldLoad(Load evt) {
 			ChestNetworkSaveHandler handler = instance(evt.world.isRemote);
+			System.out.println(evt.world.isRemote);
 			if (evt.world.isRemote) {
 				reloadHandler(true, null);
 			} else if (handler == null) {
@@ -45,7 +46,8 @@ public class ChestNetworkSaveHandler {
 		
 		@ForgeSubscribe
 		public void onWorldUnload(Unload evt) {
-			if (!evt.world.isRemote) {
+			System.out.println("Unloading world: " + evt.world.provider.dimensionId);
+			if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
 				serverSide = null;
 			}
 		}
@@ -109,7 +111,7 @@ public class ChestNetworkSaveHandler {
 					
 					NBTTagList curConts = ntwchTagComp.getTagList(curNet+"contents");
 					
-					InventoryChestNetwork inv = new InventoryChestNetwork(curNet);
+					InventoryChestNetwork inv = new InventoryChestNetwork(curNet, curNet);
 					
 					for (int j = 0; j < curConts.tagCount(); j ++) {
 						NBTTagCompound curSlot = (NBTTagCompound) curConts.tagAt(j);
@@ -130,11 +132,6 @@ public class ChestNetworkSaveHandler {
 				e.printStackTrace();
 			}
 			
-		}
-		
-		if (!networks.contains("")) {
-			networks.add("");
-			contents.put("", new InventoryChestNetwork(""));
 		}
 	}
 
@@ -181,11 +178,12 @@ public class ChestNetworkSaveHandler {
 		}
 	}
 
-	public InventoryChestNetwork getInventory(String network) {
+	public InventoryChestNetwork getInventory(String network, String name) {
 		if (!networks.contains(network)) {
 			networks.add(network);
-			contents.put(network, new InventoryChestNetwork(network));
+			contents.put(network, new InventoryChestNetwork(network, name));
 		}
+		contents.get(network).setName(name);
 		return contents.get(network);
 	}
 

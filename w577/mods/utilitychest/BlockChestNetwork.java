@@ -70,8 +70,8 @@ public class BlockChestNetwork extends BlockContainer {
         {
             meta = 4;
         }
+        world.setBlockMetadataWithNotify(i, j, k, meta);
         if (entity instanceof EntityPlayer) {
-        	world.setBlockMetadataWithNotify(i, j, k, meta);
         	((EntityPlayer) entity).openGui(UtilityChest.instance, 0, world, i, j, k);
         }
 	}
@@ -80,6 +80,9 @@ public class BlockChestNetwork extends BlockContainer {
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityPlayer, int i1, float f, float f1, float f2) {
 		if (world.isRemote) {
 			return true;
+		}
+		if (entityPlayer.isSneaking()) {
+			return false;
 		}
 		entityPlayer.openGui(UtilityChest.instance, 1, world, i, j, k);
 		return true;

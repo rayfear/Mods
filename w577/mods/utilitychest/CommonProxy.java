@@ -16,13 +16,16 @@ public class CommonProxy implements IGuiHandler {
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (ID == 0) {
+		if (te == null) {
+			return null;
 		}
 		if (ID == 1) {
 			TileEntityChestNetwork tecn = (TileEntityChestNetwork) te;
 			ChestNetworkSaveHandler ces = ChestNetworkSaveHandler.instance(false);
-			System.out.println(ces);
-			return new ContainerChest(player.inventory, ChestNetworkSaveHandler.instance(false).getInventory(tecn.network));
+			return new ContainerChest(player.inventory, ChestNetworkSaveHandler.instance(false).getInventory(tecn.network, tecn.network));
+		}
+		if (ID == 2) {
+			return new ContainerAdvancedChestUtility(player.inventory, (TileEntityAdvancedChestUtility) te);
 		}
 		return null;
 	}

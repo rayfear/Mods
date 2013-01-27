@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import w577.mods.utilitychest.BlockChestNetwork;
+import w577.mods.utilitychest.BlockChestUtility;
 import w577.mods.utilitychest.UtilityChest;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -17,6 +18,9 @@ public class ChestUtilityRenderHelper implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
 		if (block instanceof BlockChestNetwork) {
+			TileEntityRenderer.instance.renderTileEntityAt(block.createTileEntity(null, 0), 0.0D, 0.0D, 0.0D, 0.0F);
+		}
+		if (block instanceof BlockChestUtility) {
 			TileEntityRenderer.instance.renderTileEntityAt(block.createTileEntity(null, 0), 0.0D, 0.0D, 0.0D, 0.0F);
 		}
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

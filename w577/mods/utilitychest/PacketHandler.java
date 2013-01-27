@@ -58,14 +58,12 @@ public class PacketHandler implements IPacketHandler {
 		int x = te.xCoord;
 		int y = te.yCoord;
 		int z = te.zCoord;
-		//int dim = te.worldObj.getWorldInfo().getDimension();
 		String network = te.network;
 		
 		try {
 			dos.writeInt(x);
 			dos.writeInt(y);
 			dos.writeInt(z);
-			//dos.writeInt(dim);
 			writeString(dos, network);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,35 +78,8 @@ public class PacketHandler implements IPacketHandler {
 	}
 	
 	public static Packet250CustomPayload getNetworkPacketServer(TileEntityChestNetwork te) {
-		// TODO Auto-generated method stub
 		Packet250CustomPayload pack = getNetworkPacket(te);
 		pack.channel = "NetworkChestServ";
-		return pack;
-	}
-	
-	public static Packet250CustomPayload getNetworkPacketSet(TileEntityChestNetwork te, int slot, ItemStack item) {
-		if (item == null) {
-			return getNetworkPacketSet(te, slot, new ItemStack(1, 0, 0));
-		}
-		Packet250CustomPayload pack = new Packet250CustomPayload();
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
-		try {
-			writeString(dos, te.network);
-			dos.writeInt(slot);
-			dos.writeInt(item.itemID);
-			dos.writeInt(item.stackSize);
-			dos.writeInt(item.getItemDamage());
-			dos.writeBoolean(item.hasTagCompound());
-			if (item.hasTagCompound()) {
-				NBTTagCompound.writeNamedTag(item.getTagCompound(), dos);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		pack.data = bos.toByteArray();
-		pack.channel = "NetworkSet";
-		pack.length = bos.size();
 		return pack;
 	}
 	
