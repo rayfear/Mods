@@ -95,9 +95,9 @@ public class ChestNetworkSaveHandler {
 		
 		File file = new File(".");
 		if (!(MinecraftServer.getServer() instanceof DedicatedServer)) {
-			file = new File(file, "\\saves\\");
+			file = new File(file, "/saves/");
 		}
-		file = new File(file, curWorld + "\\ntwch.dat");
+		file = new File(file, curWorld + "/ntwch.dat");
 		
 		if (file.exists()) {
 			try {
@@ -160,10 +160,10 @@ public class ChestNetworkSaveHandler {
 		
 		File file = new File(".");
 		if (!(MinecraftServer.getServer() instanceof DedicatedServer)) {
-			file = new File(file, "\\saves\\");
+			file = new File(file, "/saves/");
 		}
-		File tmpFile = new File(file, curWorld + "\\tmpntwch.dat");
-		file = new File(file, curWorld + "\\ntwch.dat");
+		File tmpFile = new File(file, curWorld + "/tmpntwch.dat");
+		file = new File(file, curWorld + "/ntwch.dat");
 		
 		
 		try {

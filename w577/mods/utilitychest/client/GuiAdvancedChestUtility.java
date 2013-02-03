@@ -61,9 +61,8 @@ public class GuiAdvancedChestUtility extends GuiContainer {
 							- pctBurnLeft, 176 + (upperInv.getGuiXPos() * 16),
 							48 - pctBurnLeft, 16, pctBurnLeft);
 				} else {
-					this.drawTexturedModalRect(xPos + 132, yPos + 8
-							+ pctBurnLeft, 176 + (upperInv.getGuiXPos() * 16),
-							32 + pctBurnLeft, 16, pctBurnLeft);
+					this.drawTexturedModalRect(xPos + 132, yPos + 8, 176 + (upperInv.getGuiXPos() * 16),
+							32, 16, pctBurnLeft);
 				}
 			}
 			if (upperInv.doesCook()) {

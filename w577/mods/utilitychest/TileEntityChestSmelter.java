@@ -38,7 +38,7 @@ public class TileEntityChestSmelter extends TileEntityAdvancedChestUtility {
 			}
 			
 			if (canSmelt() != -1) {
-				if (burnTime == 0) {
+				if (burnTime == 0 && !requiresFuel()) {
 					cookTime ++;
 				} else if (burnTime > 0) {
 					cookTime += 5;
@@ -62,6 +62,10 @@ public class TileEntityChestSmelter extends TileEntityAdvancedChestUtility {
 		}
     }
 	
+	public boolean requiresFuel() {
+		return false;
+	}
+
 	public int canSmelt() {
 		int ret = -1;
 		for (int i = 1; i < getSizeInventory(); i++) {

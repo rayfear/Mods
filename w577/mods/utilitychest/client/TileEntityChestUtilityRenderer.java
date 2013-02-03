@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import w577.mods.utilitychest.TileEntityChestStealth;
 
 public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 	
@@ -17,14 +18,16 @@ public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1,
+	public void renderTileEntityAt(TileEntity te, double d, double d1,
 			double d2, float f) {
-		TileEntity te = (TileEntity) tileentity;
 		int i;
 		if (te.worldObj == null) {
 			i = 0;
 		} else {
 			i = te.getBlockMetadata();
+		}
+		
+		if (te instanceof TileEntityChestStealth) {
 		}
 
 		bindTextureByName(fileLoc);

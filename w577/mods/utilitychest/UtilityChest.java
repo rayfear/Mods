@@ -44,8 +44,11 @@ public class UtilityChest {
 	public static BlockChestGrabber blockChestGrabber;
 	
 	public static BlockChestAdvancedUtility blockChestDeenchanter;
+	public static BlockChestStealth blockChestStealth;
 	
 	public static int renderId;
+
+	public static int stealthRenderId;
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
@@ -57,6 +60,7 @@ public class UtilityChest {
 		int scbi = 3009;
 		
 		int dcbi = 3010;
+		int stcbi = 3011;
 		
 		try {
 			conf.load();
@@ -67,6 +71,7 @@ public class UtilityChest {
 			scbi = conf.getBlock("smelterID", 3009).getInt();
 			
 			dcbi = conf.getBlock("deenchanterID", 3010).getInt();
+			stcbi = conf.getBlock("stealthID", 3011).getInt();
 		} catch (Exception e) {
 			FMLLog.log(Level.WARNING, e,
 					"Utility Chest Mod could not load config, using defaults");
@@ -82,6 +87,7 @@ public class UtilityChest {
 				scbi, TileEntityChestSmelter.class).setBlockName("SmelterChest");
 		
 		blockChestDeenchanter = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(dcbi, TileEntityChestDeenchanter.class).setBlockName("DeenchanterChest");
+		blockChestStealth = new BlockChestStealth(stcbi);
 		
 		GameRegistry.registerBlock(blockChestNetwork, ItemBlock.class, "NetworkedChest", "UtilityChest");
 		GameRegistry.registerBlock(blockChestTools, ItemBlock.class, "ToolsChest", "UtilityChest");
@@ -90,6 +96,7 @@ public class UtilityChest {
 		GameRegistry.registerBlock(blockChestSmelter, ItemBlock.class, "SmelterChest", "UtilityChest");
 		
 		GameRegistry.registerBlock(blockChestDeenchanter, ItemBlock.class, "DeenchanterChest", "UtilityChest");
+		GameRegistry.registerBlock(blockChestStealth, ItemBlock.class, "StealthChest", "UtilityChest");
 		
 		GameRegistry.registerTileEntity(TileEntityChestNetwork.class, "NetworkedChest");
 		GameRegistry.registerTileEntity(TileEntityChestTools.class, "ToolsChest");
@@ -98,6 +105,7 @@ public class UtilityChest {
 		GameRegistry.registerTileEntity(TileEntityChestSmelter.class, "SmelterChest");
 		
 		GameRegistry.registerTileEntity(TileEntityChestDeenchanter.class, "DeenchanterChest");
+		GameRegistry.registerTileEntity(TileEntityChestStealth.class, "StealthChest");
 		
 		UtilityChestRecipeHandler.addRecipes();
 		
@@ -112,6 +120,7 @@ public class UtilityChest {
 		LanguageRegistry.instance().addStringLocalization("tile.GrabberChest.name", "en_US", "Grabber Chest");
 		LanguageRegistry.instance().addStringLocalization("tile.SmelterChest.name", "en_US", "Smelter Chest");
 		LanguageRegistry.instance().addStringLocalization("tile.DeenchanterChest.name", "en_US", "Deenchanter Chest");
+		LanguageRegistry.instance().addStringLocalization("tile.StealthChest.name", "en_US", "Stealth Chest");
 		
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		proxy.registerRenderers();
