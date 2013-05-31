@@ -29,7 +29,6 @@ public class ChestNetworkSaveHandler {
 		@ForgeSubscribe
 		public void onWorldLoad(Load evt) {
 			ChestNetworkSaveHandler handler = instance(evt.world.isRemote);
-			System.out.println(evt.world.isRemote);
 			if (evt.world.isRemote) {
 				reloadHandler(true, null);
 			} else if (handler == null) {
@@ -46,7 +45,6 @@ public class ChestNetworkSaveHandler {
 		
 		@ForgeSubscribe
 		public void onWorldUnload(Unload evt) {
-			System.out.println("Unloading world: " + evt.world.provider.dimensionId);
 			if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
 				serverSide = null;
 			}
@@ -83,7 +81,7 @@ public class ChestNetworkSaveHandler {
 	}
 
 	public void load(World world) {
-		String worldName = world.getSaveHandler().getSaveDirectoryName();
+		String worldName = world.getSaveHandler().getWorldDirectoryName();
 		
 		if (curWorld.equals(worldName)) {
 			return;
@@ -93,7 +91,7 @@ public class ChestNetworkSaveHandler {
 		networks = new ArrayList<String>();
 		contents = new HashMap<String, InventoryChestNetwork>();
 		
-		File file = new File(".");
+		File file = MinecraftServer.getServer().getFile("");
 		if (!(MinecraftServer.getServer() instanceof DedicatedServer)) {
 			file = new File(file, "/saves/");
 		}
@@ -158,7 +156,7 @@ public class ChestNetworkSaveHandler {
 		NBTTagCompound ntwchCompMain = new NBTTagCompound();
 		ntwchCompMain.setTag("ntwch", ntwchTagList);
 		
-		File file = new File(".");
+		File file = MinecraftServer.getServer().getFile("");
 		if (!(MinecraftServer.getServer() instanceof DedicatedServer)) {
 			file = new File(file, "/saves/");
 		}

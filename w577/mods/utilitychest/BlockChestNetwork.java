@@ -6,9 +6,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -17,9 +19,8 @@ public class BlockChestNetwork extends BlockContainer {
 
 	public BlockChestNetwork(int id) {
 		super(id, Material.wood);
-		this.blockIndexInTexture = 0;
 		this.setCreativeTab(CreativeTabs.tabMisc);
-		this.setBlockName("NetworkedChest");
+		this.setUnlocalizedName("NetworkedChest");
 		if (id >= 256) {
 			this.disableStats();
 		}
@@ -47,7 +48,7 @@ public class BlockChestNetwork extends BlockContainer {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity) {
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity, ItemStack is) {
 		int face = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int meta = 2;
 		
@@ -70,7 +71,7 @@ public class BlockChestNetwork extends BlockContainer {
         {
             meta = 4;
         }
-        world.setBlockMetadataWithNotify(i, j, k, meta);
+        world.setBlockMetadataWithNotify(i, j, k, meta, 3);
         if (entity instanceof EntityPlayer) {
         	((EntityPlayer) entity).openGui(UtilityChest.instance, 0, world, i, j, k);
         }
@@ -88,5 +89,11 @@ public class BlockChestNetwork extends BlockContainer {
 		return true;
 		
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("wood");
+    }
 
 }

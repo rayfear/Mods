@@ -17,6 +17,7 @@ public class TileEntityChestSmelter extends TileEntityAdvancedChestUtility {
 	@Override
 	public void updateEntity()
     {
+		super.updateEntity();
 		boolean hasFuel = burnTime > 0;
 		boolean changed = false;
 		if (burnTime > 0) {
@@ -104,6 +105,11 @@ public class TileEntityChestSmelter extends TileEntityAdvancedChestUtility {
 	
 	public ItemStack getSmeltingResult(ItemStack is) {
 		return FurnaceRecipes.smelting().getSmeltingResult(is);
+	}
+	
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return true;
 	}
 	
 }

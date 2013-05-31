@@ -34,11 +34,11 @@ public class GuiNetworkChest extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		controlList.clear();
+		buttonList.clear();
 		Keyboard.enableRepeatEvents(true);
-		controlList.add(new GuiButton(0, width / 2 - 100, height / 4 + 120,
+		buttonList.add(new GuiButton(0, width / 2 - 100, height / 4 + 120,
 				"Done"));
-		((GuiButton) controlList.get(0)).enabled = false;
+		((GuiButton) buttonList.get(0)).enabled = false;
 		nameBox = new GuiTextField(fontRenderer, width / 2 - 100, 60, 200, 20);
 		nameBox.setFocused(true);
 		nameBox.setMaxStringLength(34);
@@ -57,7 +57,7 @@ public class GuiNetworkChest extends GuiScreen {
 			network = network + '+' + passBox.getText();
 		}
 		te.network = network;
-		NetClientHandler nch = this.mc.getSendQueue();
+		NetClientHandler nch = this.mc.getNetHandler();
 		if (nch != null) {
 			nch.addToSendQueue(PacketHandler.getNetworkPacketServer(te));
 		}
@@ -93,7 +93,7 @@ public class GuiNetworkChest extends GuiScreen {
 	@Override
 	protected void keyTyped(char c, int i) {
 		if (c == '\r') {
-			actionPerformed((GuiButton) controlList.get(0));
+			actionPerformed((GuiButton) buttonList.get(0));
 		}
 		if (c == 9) {
 			if (nameBox.isFocused()) {
@@ -110,9 +110,9 @@ public class GuiNetworkChest extends GuiScreen {
 			passBox.textboxKeyTyped(c, i);
 		}
 		if (nameBox.getText().equals("")) {
-			((GuiButton) controlList.get(0)).enabled = false;
+			((GuiButton) buttonList.get(0)).enabled = false;
 		} else {
-			((GuiButton) controlList.get(0)).enabled = true;
+			((GuiButton) buttonList.get(0)).enabled = true;
 		}
 	}
 

@@ -38,10 +38,8 @@ public class GuiAdvancedChestUtility extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-		int textureId = this.mc.renderEngine
-				.getTexture("/chestModImages/gui/utilitygui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.bindTexture(textureId);
+		this.mc.renderEngine.bindTexture("/chestModImages/gui/utilitygui.png");
 		int xPos = (this.width - this.xSize) / 2;
 		int yPos = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(xPos, yPos, 0, 0, this.xSize, this.ySize);

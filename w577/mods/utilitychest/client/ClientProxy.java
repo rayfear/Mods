@@ -19,7 +19,6 @@ import w577.mods.utilitychest.TileEntityChestGrabber;
 import w577.mods.utilitychest.TileEntityChestNetwork;
 import w577.mods.utilitychest.TileEntityChestOres;
 import w577.mods.utilitychest.TileEntityChestSmelter;
-import w577.mods.utilitychest.TileEntityChestStealth;
 import w577.mods.utilitychest.TileEntityChestTools;
 import w577.mods.utilitychest.UtilityChest;
 
@@ -34,7 +33,6 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestSmelter.class, new TileEntityChestUtilityRenderer(this.getImageDir() + "chestsmelter.png"));
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestDeenchanter.class, new TileEntityChestUtilityRenderer(this.getImageDir() + "chestdeenchant.png"));
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestStealth.class, new TileEntityChestUtilityRenderer(this.getImageDir() + "cheststealth.png"));
 		
 		UtilityChest.renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new ChestUtilityRenderHelper());
@@ -53,7 +51,6 @@ public class ClientProxy extends CommonProxy {
 			if (MinecraftServer.getServer() == null || ChestNetworkSaveHandler.instance(false) == null) {
 				return new GuiChest(player.inventory, new InventoryChestNetwork("", tecn.network));
 			}
-			System.out.println(MinecraftServer.getServer());
 			ChestNetworkSaveHandler ces = ChestNetworkSaveHandler.instance(false);
 			String name = ((TileEntityChestNetwork) MinecraftServer.getServer().worldServerForDimension(player.dimension).getBlockTileEntity(x, y, z)).network;
 			return new GuiChest(player.inventory, (IInventory) ces.getInventory("", name));

@@ -10,7 +10,7 @@ public class BlockChestGrabber extends BlockChestUtility {
 
 	protected BlockChestGrabber(int id) {
 		super(id, TileEntityChestGrabber.class);
-		this.setBlockName("GrabberChest");
+		this.setUnlocalizedName("GrabberChest");
 	}
 	
 	@Override
@@ -22,7 +22,7 @@ public class BlockChestGrabber extends BlockChestUtility {
 		if (entity instanceof EntityItem && te instanceof TileEntityChestGrabber) {
 			TileEntityChestGrabber tecg = (TileEntityChestGrabber) te;
 			EntityItem item = (EntityItem) entity;
-			ItemStack is = item.func_92014_d();
+			ItemStack is = item.getEntityItem();
 			tecg.putStackInSlotOrDrop(is);
 			entity.setDead();
 			tecg.onInventoryChanged();

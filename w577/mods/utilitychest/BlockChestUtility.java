@@ -2,8 +2,13 @@ package w577.mods.utilitychest;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -46,7 +51,7 @@ public class BlockChestUtility extends BlockContainer {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity) {
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity, ItemStack is) {
 		int face = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int meta = 2;
 		
@@ -69,7 +74,7 @@ public class BlockChestUtility extends BlockContainer {
         {
             meta = 4;
         }
-        world.setBlockMetadataWithNotify(i, j, k, meta);
+        world.setBlockMetadataWithNotify(i, j, k, meta, 3);
 	}
 	
 	@Override
@@ -131,7 +136,7 @@ public class BlockChestUtility extends BlockContainer {
 
                         if (var9.hasTagCompound())
                         {
-                            var14.func_92014_d().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
+                            var14.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
                         }
                     }
                 }
@@ -140,5 +145,11 @@ public class BlockChestUtility extends BlockContainer {
 
         super.breakBlock(world, i, j, k, par5, par6);
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("wood");
+    }
 
 }

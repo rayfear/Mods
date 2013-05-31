@@ -32,6 +32,7 @@ public class TileEntityChestTools extends TileEntityAdvancedChestUtility {
 	@Override
 	public void updateEntity()
     {
+		super.updateEntity();
 		boolean hasFuel = burnTime > 0;
 		boolean changed = false;
 		if (burnTime > 0) {

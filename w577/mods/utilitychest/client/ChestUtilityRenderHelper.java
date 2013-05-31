@@ -1,17 +1,18 @@
 package w577.mods.utilitychest.client;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import w577.mods.utilitychest.BlockChestNetwork;
-import w577.mods.utilitychest.BlockChestStealth;
 import w577.mods.utilitychest.BlockChestUtility;
-import w577.mods.utilitychest.TileEntityChestStealth;
 import w577.mods.utilitychest.UtilityChest;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -33,17 +34,6 @@ public class ChestUtilityRenderHelper implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
-		if (block instanceof BlockChestStealth) {
-			System.out.println("Rendering");
-			TileEntity te = world.getBlockTileEntity(x,y,z);
-			if (te instanceof TileEntityChestStealth) {
-				TileEntityChestStealth tecs = (TileEntityChestStealth) te;
-				if (tecs.getStackInSlot(0) != null && tecs.getStackInSlot(0).getItem() instanceof ItemBlock && Block.blocksList[tecs.getStackInSlot(0).itemID].isOpaqueCube()) {
-					renderer.renderStandardBlock(Block.blocksList[tecs.getStackInSlot(0).itemID], x, y, z);
-					return true;
-				}
-			}
-		}
 		return false;
 	}
 

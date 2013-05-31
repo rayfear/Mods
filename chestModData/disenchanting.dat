@@ -1,0 +1,28 @@
+#This holds the data for the disenchanting chest
+#Format ID/multiplier%
+#Armour
+0/100
+1/150
+2/150
+3/200
+4/200
+5/250
+6/2100
+7/300
+#Sword
+16/100
+17/100
+18/100
+19/200
+20/250
+21/300
+#Tools
+32/100
+33/2100
+34/200
+35/300
+#Bow
+48/100
+49/250
+50/250
+51/2100

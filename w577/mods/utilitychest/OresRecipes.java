@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import w577.mods.base.CustomFile;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,15 +22,20 @@ public class OresRecipes {
 	}
 	
 	private OresRecipes() {
-		addRecipe(Block.oreCoal.blockID, 2, 2, Item.coal.itemID);
-		addRecipe(Block.oreIron.blockID, Item.ingotIron.itemID);
-		addRecipe(Block.oreGold.blockID, Item.ingotGold.itemID);
-		addRecipe(Block.oreRedstone.blockID, 4, 4, Item.redstone.itemID);
-		addRecipe(Block.oreLapis.blockID, 0, 8, 4, Item.dyePowder.itemID, 4);
-		addRecipe(Block.oreDiamond.blockID, 3, 2, Item.diamond.itemID);
-		addRecipe(Block.oreEmerald.blockID, 3, 2, Item.emerald.itemID);
+		CustomFile recipeFile = new CustomFile("chestModData/ores.dat");
+		for (int i = 0; i < recipeFile.size(); i++) {
+			addRecipe(recipeFile.getLine(i));
+		}
 	}
 	
+	public void addRecipe(int[] line) {
+		switch(line.length) {
+		case 2: addRecipe(line[0], line[1]); break;
+		case 4: addRecipe(line[0], line[1], line[2], line[3]); break;
+		case 6: addRecipe(line[0], line[1], line[2], line[3], line[4], line[5]); break;
+		}
+	}
+
 	public void addRecipe(int itemID, int returnID) {
 		addRecipe(itemID, 0, 2, 1, returnID, 0);
 	}

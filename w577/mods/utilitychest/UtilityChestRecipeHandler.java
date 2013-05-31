@@ -19,25 +19,25 @@ public class UtilityChestRecipeHandler {
 						Block.blockDiamond, '#', Block.chest });
 
 		GameRegistry.addRecipe(new ItemStack(UtilityChest.blockChestOres),
-				new Object[] { "aba", "c#d", "aea", 'a', Block.blockSteel, 'b',
+				new Object[] { "aba", "c#d", "aea", 'a', Block.blockIron, 'b',
 						Block.oreCoal, 'c', Block.oreLapis, 'd',
 						Block.oreRedstone, 'e', Block.oreDiamond, '#',
 						Block.chest });
 
 		GameRegistry.addRecipe(new ItemStack(UtilityChest.blockChestOres),
-				new Object[] { "aea", "c#d", "aba", 'a', Block.blockSteel, 'b',
+				new Object[] { "aea", "c#d", "aba", 'a', Block.blockIron, 'b',
 						Block.oreCoal, 'c', Block.oreLapis, 'd',
 						Block.oreRedstone, 'e', Block.oreDiamond, '#',
 						Block.chest });
 
 		GameRegistry.addRecipe(new ItemStack(UtilityChest.blockChestOres),
-				new Object[] { "aca", "e#b", "ada", 'a', Block.blockSteel, 'b',
+				new Object[] { "aca", "e#b", "ada", 'a', Block.blockIron, 'b',
 						Block.oreCoal, 'c', Block.oreLapis, 'd',
 						Block.oreRedstone, 'e', Block.oreDiamond, '#',
 						Block.chest });
 
 		GameRegistry.addRecipe(new ItemStack(UtilityChest.blockChestOres),
-				new Object[] { "ada", "e#b", "aca", 'a', Block.blockSteel, 'b',
+				new Object[] { "ada", "e#b", "aca", 'a', Block.blockIron, 'b',
 						Block.oreCoal, 'c', Block.oreLapis, 'd',
 						Block.oreRedstone, 'e', Block.oreDiamond, '#',
 						Block.chest });
@@ -49,8 +49,14 @@ public class UtilityChestRecipeHandler {
 
 		GameRegistry.addRecipe(new ItemStack(UtilityChest.blockChestSmelter),
 				new Object[] { "aaa", "b#b", "cdc", 'a', Item.fireballCharge,
-						'b', Item.blazeRod, 'c', Block.stoneOvenIdle, 'd',
+						'b', Item.blazeRod, 'c', Block.furnaceIdle, 'd',
 						Item.bucketLava, '#', Block.chest });
+
+		GameRegistry.addRecipe(
+				new ItemStack(UtilityChest.blockChestDeenchanter),
+				new Object[] { "aba", "b#b", "aba", 'a',
+						new ItemStack(Item.dyePowder, 1, 4), 'b',
+						Block.obsidian, '#', Block.chest });
 	}
 
 }

@@ -2,6 +2,8 @@ package w577.mods.utilitychest;
 
 import java.util.logging.Level;
 
+import w577.mods.base.CustomFile;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.1.1")
+@Mod(modid = "UtilityChest", name = "Utility Chest Mod", version = "2.2 PRE4")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"NetworkChest", "NetworkChestServ"}, packetHandler = PacketHandler.class)
 public class UtilityChest {
 
@@ -44,7 +46,6 @@ public class UtilityChest {
 	public static BlockChestGrabber blockChestGrabber;
 	
 	public static BlockChestAdvancedUtility blockChestDeenchanter;
-	public static BlockChestStealth blockChestStealth;
 	
 	public static int renderId;
 
@@ -71,7 +72,6 @@ public class UtilityChest {
 			scbi = conf.getBlock("smelterID", 3009).getInt();
 			
 			dcbi = conf.getBlock("deenchanterID", 3010).getInt();
-			stcbi = conf.getBlock("stealthID", 3011).getInt();
 		} catch (Exception e) {
 			FMLLog.log(Level.WARNING, e,
 					"Utility Chest Mod could not load config, using defaults");
@@ -80,14 +80,13 @@ public class UtilityChest {
 		}
 		
 		blockChestNetwork = new BlockChestNetwork(ncbi);
-		blockChestTools = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(tcbi, TileEntityChestTools.class).setBlockName("ToolsChest");
-		blockChestOres = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(ocbi, TileEntityChestOres.class).setBlockName("OresChest");
+		blockChestTools = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(tcbi, TileEntityChestTools.class).setUnlocalizedName("ToolsChest");
+		blockChestOres = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(ocbi, TileEntityChestOres.class).setUnlocalizedName("OresChest");
 		blockChestGrabber = new BlockChestGrabber(gcbi);
 		blockChestSmelter = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(
-				scbi, TileEntityChestSmelter.class).setBlockName("SmelterChest");
+				scbi, TileEntityChestSmelter.class).setUnlocalizedName("SmelterChest");
 		
-		blockChestDeenchanter = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(dcbi, TileEntityChestDeenchanter.class).setBlockName("DeenchanterChest");
-		blockChestStealth = new BlockChestStealth(stcbi);
+		blockChestDeenchanter = (BlockChestAdvancedUtility) new BlockChestAdvancedUtility(dcbi, TileEntityChestDeenchanter.class).setUnlocalizedName("DeenchanterChest");
 		
 		GameRegistry.registerBlock(blockChestNetwork, ItemBlock.class, "NetworkedChest", "UtilityChest");
 		GameRegistry.registerBlock(blockChestTools, ItemBlock.class, "ToolsChest", "UtilityChest");
@@ -96,7 +95,6 @@ public class UtilityChest {
 		GameRegistry.registerBlock(blockChestSmelter, ItemBlock.class, "SmelterChest", "UtilityChest");
 		
 		GameRegistry.registerBlock(blockChestDeenchanter, ItemBlock.class, "DeenchanterChest", "UtilityChest");
-		GameRegistry.registerBlock(blockChestStealth, ItemBlock.class, "StealthChest", "UtilityChest");
 		
 		GameRegistry.registerTileEntity(TileEntityChestNetwork.class, "NetworkedChest");
 		GameRegistry.registerTileEntity(TileEntityChestTools.class, "ToolsChest");
@@ -105,7 +103,6 @@ public class UtilityChest {
 		GameRegistry.registerTileEntity(TileEntityChestSmelter.class, "SmelterChest");
 		
 		GameRegistry.registerTileEntity(TileEntityChestDeenchanter.class, "DeenchanterChest");
-		GameRegistry.registerTileEntity(TileEntityChestStealth.class, "StealthChest");
 		
 		UtilityChestRecipeHandler.addRecipes();
 		
@@ -119,15 +116,17 @@ public class UtilityChest {
 		LanguageRegistry.instance().addStringLocalization("tile.OresChest.name", "en_US", "Ores Chest");
 		LanguageRegistry.instance().addStringLocalization("tile.GrabberChest.name", "en_US", "Grabber Chest");
 		LanguageRegistry.instance().addStringLocalization("tile.SmelterChest.name", "en_US", "Smelter Chest");
-		LanguageRegistry.instance().addStringLocalization("tile.DeenchanterChest.name", "en_US", "Deenchanter Chest");
+		LanguageRegistry.instance().addStringLocalization("tile.DeenchanterChest.name", "en_US", "Disenchanting Chest");
 		LanguageRegistry.instance().addStringLocalization("tile.StealthChest.name", "en_US", "Stealth Chest");
 		
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 		proxy.registerRenderers();
+		
+		//OresRecipes.instance();
+		//EnchantingRecipes.instance();
 	}
 	
 	@PostInit
 	public void postInit(FMLPostInitializationEvent evt) {
-		
 	}
 }

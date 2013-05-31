@@ -3,10 +3,11 @@ package w577.mods.utilitychest.client;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import w577.mods.utilitychest.TileEntityChestStealth;
 
 public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 	
@@ -25,9 +26,6 @@ public class TileEntityChestUtilityRenderer extends TileEntitySpecialRenderer {
 			i = 0;
 		} else {
 			i = te.getBlockMetadata();
-		}
-		
-		if (te instanceof TileEntityChestStealth) {
 		}
 
 		bindTextureByName(fileLoc);

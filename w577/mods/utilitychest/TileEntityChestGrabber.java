@@ -18,7 +18,7 @@ public class TileEntityChestGrabber extends TileEntityChestUtility {
 		item.motionY = 0D;
 		item.motionZ = 0D;
 		if (is.hasTagCompound()) {
-			item.func_92014_d().setTagCompound((NBTTagCompound) is.getTagCompound().copy());
+			item.getEntityItem().setTagCompound((NBTTagCompound) is.getTagCompound().copy());
 		}
 		this.worldObj.spawnEntityInWorld(item);
 	}

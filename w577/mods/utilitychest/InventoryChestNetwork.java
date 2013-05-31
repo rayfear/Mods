@@ -13,7 +13,7 @@ public class InventoryChestNetwork extends InventoryBasic {
 	}*/
 	
 	public InventoryChestNetwork(String network, String name) {
-		super("Networked Chest", 27);
+		super("Networked Chest", true, 27);
 		this.network = network;
 		this.name = name;
 	}

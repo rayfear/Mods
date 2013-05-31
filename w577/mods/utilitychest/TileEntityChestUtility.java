@@ -3,6 +3,7 @@ package w577.mods.utilitychest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -143,21 +144,21 @@ public abstract class TileEntityChestUtility extends TileEntity implements IInve
 					}
 				}
 			}
+		}
 			
-			if (smeltResult.stackSize > 0) {
-				i = startSlot;
-				while (i < getSizeInventory()) {
-					itemStack = getStackInSlot(i);
-					if (itemStack == null) {
-						setInventorySlotContents(i, smeltResult.copy());
-						smeltResult.stackSize = 0;
-						return;
-					}
-					i++;
+		if (smeltResult.stackSize > 0) {
+			i = startSlot;
+			while (i < getSizeInventory()) {
+				itemStack = getStackInSlot(i);
+				if (itemStack == null) {
+					setInventorySlotContents(i, smeltResult.copy());
+					smeltResult.stackSize = 0;
+					return;
 				}
-			} else {
-				return;
+				i++;
 			}
+		} else {
+			return;
 		}
 		dropItem(smeltResult);
 	}
@@ -168,9 +169,19 @@ public abstract class TileEntityChestUtility extends TileEntity implements IInve
 		item.motionY = 0.4D;
 		item.motionZ = 0D;
 		if (smeltResult.hasTagCompound()) {
-			item.func_92014_d().setTagCompound((NBTTagCompound) smeltResult.getTagCompound().copy());
+			item.getEntityItem().setTagCompound((NBTTagCompound) smeltResult.getTagCompound().copy());
 		}
 		this.worldObj.spawnEntityInWorld(item);
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return true;
 	}
 
 }
